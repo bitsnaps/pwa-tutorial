@@ -30,7 +30,7 @@ self.addEventListener('install', evt => {
   //console.log('service worker installed');
   evt.waitUntil(
     caches.open(staticCacheName).then((cache) => {
-      console.log('caching shell assets');
+      // console.log('caching shell assets');
       cache.addAll(assets);
     })
   );
@@ -66,8 +66,14 @@ self.addEventListener('fetch', evt => {
       }).catch(() => {
         if(evt.request.url.indexOf('.html') > -1){
           return caches.match('/pages/fallback.html');
-        } 
+        }
       })
     );
   }
 });
+
+
+self.addEventListener('unload', (event) => {
+  // Note: if the browser is able to cache the page, `event.persisted`
+  // is `true`, and the state is frozen rather than terminated.
+}, {capture: true});
